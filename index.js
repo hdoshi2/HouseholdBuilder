@@ -32,7 +32,7 @@ function validateAge(event) {
       form.rel.focus();
     }
   } else {
-    familyList.push({ age, relationship, smoker });
+    familyList.push({ id: familyCount, age, relationship, smoker });
     age = "";
     relationship = "";
     smoker = false;
@@ -41,38 +41,43 @@ function validateAge(event) {
   event.preventDefault();
 }
 
-function add() {
-  let form = document.forms[0];
-  var node = document.createElement("LI");
-  for (let i = familyCount; i < familyList.length; i++) {
-    let age = familyList[i].age;
-    let relationship = familyList[i].relationship;
-    let relCapitalized =
-      relationship.charAt(0).toUpperCase() + relationship.slice(1);
-    let smoker = familyList[i].smoker;
-    let smoke = "";
-    if (smoker) {
-      smoke = "Smoker";
-    } else {
-      smoke = "Non-Smoker";
-    }
-    var textnode = document.createTextNode(
-      `Age: ${age}, Relationship: ${relCapitalized}, ${smoke} `
-    );
-    node.appendChild(textnode);
-    form.appendChild(node);
-    familyCount++;
+function add(event) {
+  console.log("in add", familyList);
+  validateAge(event);
+
+  // let form = document.forms[0];
+  let node = document.createElement("LI");
+
+  let age = familyList[familyCount].age;
+  let relationship = familyList[familyCount].relationship;
+  let relCapitalized =
+    relationship.charAt(0).toUpperCase() + relationship.slice(1);
+  let smoker = familyList[familyCount].smoker;
+  let smoke = "";
+  if (smoker) {
+    smoke = "Smoker";
+  } else {
+    smoke = "Non-Smoker";
   }
+  let textnode = document.createTextNode(
+    `Age: ${age}, Relationship: ${relCapitalized}, ${smoke}`
+  );
+
+  let removeButton = document.createElement("BUTTON");
+  removeButton.innerHTML = "Delete";
+  removeButton.addEventListener("click", deleteItem);
+
+  node.setAttribute("id", familyCount);
+  node.appendChild(textnode);
+  node.appendChild(removeButton);
+  form.appendChild(node);
+
+  familyCount++;
 }
 
-// var formData = new FormData(document.querySelector("form"));
-// console.log("test", formData);
 
-// var params = "";
-// for (var i = 0; i < document.myform.elements.length; i++) {
-//   var fieldName = document.myform.elements[i].name;
-//   var fieldValue = document.myform.elements[i].value;
-
-//   params += fieldName + "=" + fieldValue + "&";
-// }
-// console.log(params);
+function deleteItem(event) {
+  let listId = event.target.parentNode.id;
+  event.target.parentNode.remove();
+  familyList = familyList.filter(({ id }) => id !== +listId);
+}
