@@ -16,7 +16,6 @@ function validateAge(event) {
   let age = form.age.value;
   let relationship = form.rel.value;
   let smoker = form.smoker.checked;
-  console.log(age, relationship, smoker);
 
   if (age <= 0 || !age || relationship === "") {
     if (age <= 0) {
@@ -42,17 +41,16 @@ function validateAge(event) {
 }
 
 function add(event) {
-  console.log("in add", familyList);
   validateAge(event);
-
-  // let form = document.forms[0];
   let node = document.createElement("LI");
 
-  let age = familyList[familyCount].age;
-  let relationship = familyList[familyCount].relationship;
+  let last = familyList ? familyList.length - 1 : 0;
+
+  let age = familyList[last].age;
+  let relationship = familyList[last].relationship;
   let relCapitalized =
     relationship.charAt(0).toUpperCase() + relationship.slice(1);
-  let smoker = familyList[familyCount].smoker;
+  let smoker = familyList[last].smoker;
   let smoke = "";
   if (smoker) {
     smoke = "Smoker";
@@ -75,9 +73,9 @@ function add(event) {
   familyCount++;
 }
 
-
 function deleteItem(event) {
   let listId = event.target.parentNode.id;
+  console.log(listId);
   event.target.parentNode.remove();
   familyList = familyList.filter(({ id }) => id !== +listId);
 }
