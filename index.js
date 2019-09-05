@@ -59,7 +59,7 @@ function add(event) {
 function deleteItem(event) {
   let listId = event.target.parentNode.id;
   event.target.parentNode.remove();
-  familyList = familyList.filter(({ id }) => id !== +listId);
+  familyList.filter(({ id }) => id !== +listId);
 }
 
 //Error message when user inputs are incorrect or missing.
